@@ -13,36 +13,100 @@ export default {
   data() {
     return {
       store,
+      hasPerformedSearch: false
     };
   },
   methods: {
-    
-    getApi(){
-        // store.isLoading = true;
-        axios.get(store.apiUrl, {
-          params: {
-            query: store.searchInput
-          }
-        }).then(result => {
-            store.moviesArray  = result.data.results;
-            store.displayCard = true;
-                console.log('movies cercato -->', store.moviesArray);
-    })},
-    
-    
-    getApiTV(){
-        // store.isLoading = true;
-        axios.get(store.apiUrlTV, {
-          params: {
-            query: store.searchInput
-          }
-        }).then(result => {
-            store.seriesArray  = result.data.results;
-            store.displayCard = true;
-                console.log('series cercato -->', store.seriesArray);
-    })},    
-    
+
+    getApi() {
+    const trimmedSearchInput = (store.searchInput || "").trim();
+
+    // Imposta lo stato di loading su true
+    store.loading = true;
+
+    if (trimmedSearchInput !== "") {
+        axios
+        .get(store.apiUrl, {
+            params: {
+            query: trimmedSearchInput,
+            },
+        })
+        .then((result) => {
+            store.moviesArray = result.data.results;
+            console.log("movies", store.moviesArray);
+            this.hasPerformedSearch = true; // Imposta a true dopo la ricerca
+        })
+        .catch((error) => {
+            console.error("Errore nella chiamata API:", error);
+        })
+        .finally(() => {
+            // Imposta lo stato di loading su false alla fine
+            store.loading = false;
+        });
+    } else {
+        console.log(
+        "La stringa di ricerca è vuota dopo il trim, evito la chiamata API."
+        );
+        // Imposta lo stato di loading su false
+        store.loading = false;
+    }
     },
+
+    getApiTV() {
+    const trimmedSearchInput = (store.searchInput || "").trim();
+
+    // Imposta lo stato di loading su true
+    store.loading = true;
+
+    if (trimmedSearchInput !== "") {
+        axios
+        .get(store.apiUrlTV, {
+            params: {
+            query: trimmedSearchInput,
+            },
+        })
+        .then((result) => {
+            store.seriesArray = result.data.results;
+            console.log("series", store.seriesArray);
+            this.hasPerformedSearch = true; // Imposta a true dopo la ricerca
+        })
+        .catch((error) => {
+            console.error("Errore nella chiamata API:", error);
+        })
+        .finally(() => {
+            // Imposta lo stato di loading su false alla fine
+            store.loading = false;
+        });
+    } else {
+        console.log(
+        "La stringa di ricerca è vuota dopo il trim, evito la chiamata API."
+        );
+        // Imposta lo stato di loading su false
+        store.loading = false;
+    }
+    },
+
+    getApiLoad() {
+    store.loading = true;
+
+    axios
+      .get(store.apiUrlLoad, {})
+      .then((result) => {
+        store.moviesArray = result.data.results;
+        console.log("series", store.loadArray);
+        this.hasPerformedSearch = true; // Imposta a true dopo la ricerca
+      })
+      .finally(() => {
+        // Imposta lo stato di loading su false alla fine
+        store.loading = false;
+      });
+    },
+
+  },
+
+  created() {
+    this.getApiLoad();
+},
     
 }
 </script>
@@ -53,7 +117,7 @@ export default {
 
         <AppHeader @searchMovies="getApi" @searchSeries="getApiTV"/>
 
-        <AppMain class="bg-dark p-2"/>
+        <AppMain class="bg-dark px-5 py-1"/>
 
     </div>
 
