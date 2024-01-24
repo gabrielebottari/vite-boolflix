@@ -49,9 +49,14 @@ export default {
 
 <template>
 
-    <AppHeader @searchMovies="getApi" @searchSeries="getApiTV"/>
+    <div class="bg-dark container-fluid p-2">
 
-    <AppMain />
+        <AppHeader @searchMovies="getApi" @searchSeries="getApiTV"/>
+
+        <AppMain class="bg-dark p-2"/>
+
+    </div>
+
 
 </template>
 
