@@ -1,35 +1,43 @@
 <script>
 import AppHeader from './components/AppHeader.vue';
 import AppMain from './components/AppMain.vue';
-import AppFooter from './components/AppFooter.vue';
+import {store} from './data/store';
+import axios from 'axios'
+//import AppFooter from './components/AppFooter.vue';
 
 export default {
-    data() {
-        return {
-
-        };
+  components: {
+    AppHeader,
+    AppMain
+  },
+  data() {
+    return {
+      movies: []
+    };
+  },
+  methods: {
+    
+    getApi(){
+        // store.isLoading = true;
+        axios.get(store.apiUrl, {
+          params: {
+            query: store.searchInput
+          }
+        }).then(result => {
+          store.movieArray  = result.data.results;
+          store.displayCard = true;
+            console.log('movie cercato -->', store.movieArray);
+        })},
     },
-    components: {
-        AppHeader,
-        AppMain,
-        AppFooter
-    },  
-    methods: {
-
-    }
 }
 </script>
 
 <template>
-    <h1 class="text-center text-danger p-3">
-        Mia App
-    </h1>
 
-    <AppHeader />
+    <AppHeader @searchMovie="getApi"/>
 
-    <AppMain />
+    <AppMain :movies="movies"/>
 
-    <AppFooter />
 </template>
 
 <style lang="scss">
