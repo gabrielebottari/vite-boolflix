@@ -12,7 +12,7 @@ export default {
   },
   data() {
     return {
-      movies: []
+      store,
     };
   },
   methods: {
@@ -24,19 +24,34 @@ export default {
             query: store.searchInput
           }
         }).then(result => {
-          store.movieArray  = result.data.results;
-          store.displayCard = true;
-            console.log('movie cercato -->', store.movieArray);
-        })},
+            store.moviesArray  = result.data.results;
+            store.displayCard = true;
+                console.log('movies cercato -->', store.moviesArray);
+    })},
+    
+    
+    getApiTV(){
+        // store.isLoading = true;
+        axios.get(store.apiUrlTV, {
+          params: {
+            query: store.searchInput
+          }
+        }).then(result => {
+            store.seriesArray  = result.data.results;
+            store.displayCard = true;
+                console.log('series cercato -->', store.seriesArray);
+    })},    
+    
     },
+    
 }
 </script>
 
 <template>
 
-    <AppHeader @searchMovie="getApi"/>
+    <AppHeader @searchMovies="getApi" @searchSeries="getApiTV"/>
 
-    <AppMain :movies="movies"/>
+    <AppMain />
 
 </template>
 

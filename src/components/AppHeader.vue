@@ -29,7 +29,7 @@ export default {
                             class="form-control"
                             placeholder=""
                         />
-                        <button @click="$emit('searchMovie')" class="btn btn-danger" type="submit">Search</button>
+                        <button @click="$emit('searchMovies'), $emit('searchSeries')" class="btn btn-danger" type="submit">Search</button>
 
                     </div>
 

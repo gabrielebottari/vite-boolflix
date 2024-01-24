@@ -15,13 +15,28 @@ export default {
 
 <template>
     <main>
-        <div>
-            <div v-for="movie in store.movieArray" :key="movie.id" class="card my-3">
+        <div> 
+            <p>Film trovati</p>
+            <div v-for="movie in store.moviesArray" :key="movie.id" class="card my-3">
                 <div class="card-body">
                 <h5 class="card-title">Titolo: {{ movie.title }}</h5>
                 <p class="card-text">Titolo Originale: {{ movie.original_title }}</p>
-                <p class="card-text">Lingua: {{ movie.original_language }}</p>
+                <div class="card_language d-flex align-items-center my-1">
+                    <img :src="`/flags/${movie.original_language}.svg`" alt="">
+                </div>
                 <p class="card-text">Voto: {{ movie.vote_average }}</p>
+                </div>
+            </div>
+
+            <p>serie trovate</p>
+            <div v-for="serie in store.seriesArray" :key="serie.id" class="card my-3">
+                <div class="card-body">
+                <h5 class="card-title">Titolo: {{ serie.name }}</h5>
+                <p class="card-text">Titolo Originale: {{ serie.original_name }}</p>
+                <div class="card_language d-flex align-items-center my-1">
+                    <img :src="`/flags/${serie.original_language}.svg`" alt="#">
+                </div>
+                <p class="card-text">Voto: {{ serie.vote_average }}</p>
                 </div>
             </div>
         </div>
@@ -29,4 +44,7 @@ export default {
 </template>
 
 <style lang="scss" scoped>
+    img {
+        width: 30px;
+    }
 </style>
