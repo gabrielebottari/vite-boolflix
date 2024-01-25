@@ -6,14 +6,18 @@ export default {
 
   data(){
     
-    return {
-        store,  
-    }
+        return {
+            store,  
+        }
 
-  },
+    },
   components: {
         Card,
+    
     },
+    props: {
+    movie: Object,
+  },
 }
 </script>
 
@@ -26,7 +30,7 @@ export default {
             </div>
         </div>
 
-        <div v-else class="text-white">
+        <div v-else class="text-white container">
            <p v-if="!store.loading && store.moviesArray.length === 0 && store.seriesArray.length === 0" class="fs-1 text-center">Nessun risultato trovato!</p>
 
             <!-- Se ci sono film, mostra la sezione "Film trovati" -->
@@ -39,6 +43,8 @@ export default {
                         :originalTitle="movie.original_title" 
                         :language="movie.original_language"
                         :overview="movie.overview"
+                        :film="movie"
+                        :typeApi="'movie'"
                         :averageScore="Math.round(movie.vote_average / 2)"
                     />
                 </div>
@@ -54,6 +60,8 @@ export default {
                         :originalTitle="serie.original_name"
                         :language="serie.original_language"
                         :overview="serie.overview"
+                        :film="serie"
+                        :typeApi="'tv'"
                         :averageScore="Math.round(serie.vote_average / 2)"
                     />
                 </div>

@@ -13,7 +13,8 @@ export default {
   data() {
     return {
       store,
-      hasPerformedSearch: false
+      hasPerformedSearch: false,
+      movie: null
     };
   },
   methods: {
@@ -94,6 +95,7 @@ export default {
       .then((result) => {
         store.moviesArray = result.data.results;
         console.log("series", store.loadArray);
+        console.log("movies", store.moviesArray);
         this.hasPerformedSearch = true; // Imposta a true dopo la ricerca
       })
       .finally(() => {
@@ -107,6 +109,10 @@ export default {
   created() {
     this.getApiLoad();
 },
+mounted() {
+    // Stampa i dati del cast nella console per ispezionarli
+    console.log("Dati del cast:", this.cast);
+  },
     
 }
 </script>

@@ -1,5 +1,7 @@
 <script>
 import { store } from "../../data/store";
+import axios from 'axios';
+
 export default {
 
     props: {
@@ -9,16 +11,72 @@ export default {
         language : String,
         overview : String,
         averageScore : Number,
+        typeApi:String,
+        film:Object,
     },
 
     data() {
         return {
             store,
             showInfo: false,
+            actors:[],
+			type:[],
         }
     },
     methods: {
-  },
+        getActorsApi() {
+        if (!this.film || !this.film.id) {
+            console.error("ID del film non definito.");
+            return;
+        }
+
+        if (this.actors.length > 0 || this.type.length > 0) {
+            this.actors = [];
+            this.type = [];
+        } else {
+            const urlActors = `https://api.themoviedb.org/3/${this.typeApi}/${this.film.id}/credits?api_key=f2191c31fa927ebbbfd133d861d35f14`;
+
+            axios.get(urlActors)
+                .then((response) => {
+                    for (let i = 0; i < 5; i++) {
+                        this.actors.push(response.data.cast[i].name);
+                    }
+                    if (this.actors.length === 0) {
+                        this.actors = ["non trovato generi"];
+                    }
+                })
+                .catch((error) => {
+                    this.actors = ["non trovati attori"];
+                    console.error(error);
+                });
+
+            const urlType = `https://api.themoviedb.org/3/${this.typeApi}/${this.film.id}?api_key=f2191c31fa927ebbbfd133d861d35f14`;
+
+            axios.get(urlType)
+                .then((response) => {
+                    let i = 0;
+                    while (response.data.genres && (response.data.genres.length - 1 >= i) && i <= 2) {
+                        this.type.push(response.data.genres[i].name);
+                        i++;
+                    }
+                    if (this.type.length === 0) {
+                        this.type = ["non trovato generi"];
+                    }
+                })
+                .catch((error) => {
+                    this.type = ["non trovato generi"];
+                    console.error(error);
+                });
+        }
+    
+    },
+
+},
+mounted() {
+
+    this.getActorsApi();
+
+}
 
 }
 </script>
@@ -39,6 +97,15 @@ export default {
                 <h6>{{ originalTitle }}</h6>
                 <div class="overview">
                     <p>{{ overview }}</p>
+                    <div class="p-1" v-if="(this.type.length>0)">
+                        <div>Genere:</div>
+			            <div class="" v-for="(genre,i) in this.type" :key="i">{{ genre }}</div>
+			
+		            </div>
+		            <div class="p-1" v-if="(this.actors.length>0)">
+			            <div>Attori:</div>
+			            <div class="" v-for="(actor,i) in this.actors" :key="i">{{ actor }}</div>
+		            </div>
                 </div>
             </div>
 
@@ -101,6 +168,10 @@ export default {
                 margin: 0;
                 font-size: 0.9em;
             }
+
+            div {
+                font-size: 0.9em;
+            }
         }
     }
 
@@ -127,16 +198,16 @@ export default {
     }
   }
 
-  ::-webkit-scrollbar {
-        width: 10px; // Larghezza della scrollbar
+    ::-webkit-scrollbar {
+        width: 10px;
     }
 
     ::-webkit-scrollbar-thumb {
-        background-color: #6c757d; // Colore del "pulsante" della scrollbar
+        background-color: #6c757d;
     }
 
     ::-webkit-scrollbar-track {
-        background-color: #343a40; // Colore della "traccia" della scrollbar
+        background-color: #343a40;
     }
 }
 </style>
