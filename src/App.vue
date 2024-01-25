@@ -15,8 +15,6 @@ export default {
       store,
       hasPerformedSearch: false,
       movie: null,
-      selectedMovieGenre: null, // Inizializza con un valore di default
-      selectedTvGenre: null,    // Inizializza con un valore di default
 
     };
   },
@@ -111,54 +109,11 @@ export default {
       });
     },
 
-    handleMovieGenreChange() {
-    // Aggiungi eventuali azioni necessarie quando cambia il genere dei film
-    this.$emit('searchMovies');
-  },
-  handleTvGenreChange() {
-    // Aggiungi eventuali azioni necessarie quando cambia il genere delle serie TV
-    this.$emit('searchSeries');
-  },
-
-  handleMovieGenreChanged(newGenre) {
-      this.selectedMovieGenre = newGenre;
-    },
-    handleTvGenreChanged(newGenre) {
-      this.selectedTvGenre = newGenre;
-    },
-
   },
 
   created() {
     this.getApiLoad();
 
-    // Chiamata API per i generi dei film
-    axios
-      .get("https://api.themoviedb.org/3/genre/movie/list", {
-        params: {
-          api_key: "f2191c31fa927ebbbfd133d861d35f14",
-        },
-      })
-      .then((response) => {
-        store.movieGenres = response.data.genres;
-      })
-      .catch((error) => {
-        console.error("Errore nella chiamata API:", error);
-      });
-
-    // Chiamata API per i generi delle serie TV
-    axios
-      .get("https://api.themoviedb.org/3/genre/tv/list", {
-        params: {
-          api_key: "f2191c31fa927ebbbfd133d861d35f14",
-        },
-      })
-      .then((response) => {
-        store.tvGenres = response.data.genres;
-      })
-      .catch((error) => {
-        console.error("Errore nella chiamata API:", error);
-      });
   },
 mounted() {
     // Stampa i dati del cast nella console per ispezionarli
@@ -172,9 +127,9 @@ mounted() {
 
     <div class="bg-dark container-fluid p-2">
 
-        <AppHeader @searchMovies="getApi" @searchSeries="getApiTV" @movieGenreChanged="handleMovieGenreChanged" @tvGenreChanged="handleTvGenreChanged"/>
+        <AppHeader @searchMovies="getApi" @searchSeries="getApiTV"/>
 
-        <AppMain :selectedMovieGenre="selectedMovieGenre" :selectedTvGenre="selectedTvGenre" class="bg-dark px-5 py-1"/>
+        <AppMain class="bg-dark px-5 py-1"/>
 
     </div>
 

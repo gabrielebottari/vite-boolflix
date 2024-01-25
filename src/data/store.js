@@ -9,6 +9,7 @@ export const store = reactive({
   apiUrlCast: "https://developers.themoviedb.org/3/movies/get-movie-details",
 
   searchInput: '',
+  activeGenre: '',
   loading: false,
 
   moviesArray: [],
@@ -17,6 +18,6 @@ export const store = reactive({
   cast: [],
   movieGenres: [],
   tvGenres: [],
-  Genres: [],
+  genres: [],
 
 })

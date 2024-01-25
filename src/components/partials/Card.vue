@@ -13,6 +13,11 @@ export default {
         averageScore : Number,
         kind: String,
         film:Object,
+        activeGenre: String,
+        isActive: Boolean,
+        checkActiveGenre: Function,
+        activeGenre: Number,
+        
     },
 
     data() {
@@ -24,6 +29,14 @@ export default {
         }
     },
     methods: {
+        isActiveGenre() {
+        // Se non è stato selezionato alcun genere, considera tutte le card non attive
+        if (!this.store.activeGenre) return false;
+
+        // Se un genere è stato selezionato, verifica se la card corrisponde al genere attivo
+        return this.film.genre_ids.includes(this.store.activeGenre);
+    },
+
             getInfoApi() {
         if (!this.film || !this.film.id) {
             console.error("ID del film non definito.");
@@ -74,15 +87,23 @@ export default {
     },
     mounted() {
         this.getInfoApi();
-    }
+
+        // Aggiungi il console log qui per verificare se la carta è attiva
+        console.log("Card attiva:", this.isActive);
+        console.log("Generi della card:", this.film.genre_ids);
+        console.log("Genere attivo:", this.store.activeGenre);
+        console.log("checkActiveGenre è una funzione:", typeof this.checkActiveGenre === 'function');
+    
+    },
+
 }
 </script>
 
 <template>
 
-    <div class="movie-card" @mouseover="showInfo = true" @mouseleave="showInfo = false">
+    <div class="movie-card mt-1" :class="{ active: isActiveGenre() }" @mouseover="showInfo = true" @mouseleave="showInfo = false">
 
-        <div class="card-img pt-1">
+        <div class="card-img">
             <img v-if="poster === null" src="../../../public/nope-not-here.webp" alt="image_not_found">
             <img v-else :src="`https://image.tmdb.org/t/p/w342${poster}`" alt="poster">
         </div>
@@ -108,7 +129,7 @@ export default {
 
             <div class="card-end">
 
-                <div class="card-lang pt-1">
+                <div class="card-lang">
                     <img :src="`flags/${language}.svg`" class="lang" alt="#">
                 </div>
 
@@ -131,16 +152,25 @@ export default {
 .movie-card {
   position: relative;
   height: 420px;
+    &.active {
+        -webkit-box-shadow: #FFF 0 -1px 4px, #ff0 0 -2px 10px, #ff8000 0 -10px 20px, red 0 -18px 40px, 0px 50px 50px -30px rgba(0,0,0,0.14); 
+        box-shadow: #FFF 0 -1px 4px, #ff0 0 -2px 10px, #ff8000 0 -10px 20px, red 0 -18px 40px, 0px 50px 50px -30px rgba(0,0,0,0.14);
+    }
 
+  
   .card-img {
     position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     transform-style: preserve-3d;
     transition: transform 0.5s;
         img{
-            height: 100%;
-            width: 100%;
+            display: block;
+            width: 100%;    
+            height: 100%;   
+            margin: 0;      
         }
 
   }
@@ -154,6 +184,9 @@ export default {
     transform: rotateY(-180deg);
     transition: transform 0.5s;
     background-color: black;
+        .active{
+		background-color:orange;
+	    }
 
     .card-title{
         .overview{
