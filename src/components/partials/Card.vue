@@ -11,7 +11,7 @@ export default {
         language : String,
         overview : String,
         averageScore : Number,
-        typeApi:String,
+        kind: String,
         film:Object,
     },
 
@@ -20,21 +20,21 @@ export default {
             store,
             showInfo: false,
             actors:[],
-			type:[],
+            genres:[],
         }
     },
     methods: {
-        getActorsApi() {
+            getInfoApi() {
         if (!this.film || !this.film.id) {
             console.error("ID del film non definito.");
             return;
         }
 
-        if (this.actors.length > 0 || this.type.length > 0) {
+        if (this.actors.length > 0 || this.genres.length > 0) {
             this.actors = [];
-            this.type = [];
+            this.genres = [];
         } else {
-            const urlActors = `https://api.themoviedb.org/3/${this.typeApi}/${this.film.id}/credits?api_key=f2191c31fa927ebbbfd133d861d35f14`;
+            const urlActors = `https://api.themoviedb.org/3/${this.kind}/${this.film.id}/credits?api_key=f2191c31fa927ebbbfd133d861d35f14`;
 
             axios.get(urlActors)
                 .then((response) => {
@@ -42,42 +42,39 @@ export default {
                         this.actors.push(response.data.cast[i].name);
                     }
                     if (this.actors.length === 0) {
-                        this.actors = ["non trovato generi"];
+                        this.actors = ["Informazioni non disponibili"];
                     }
                 })
                 .catch((error) => {
-                    this.actors = ["non trovati attori"];
+                    this.actors = ["Informazioni non disponibili"];
                     console.error(error);
                 });
 
-            const urlType = `https://api.themoviedb.org/3/${this.typeApi}/${this.film.id}?api_key=f2191c31fa927ebbbfd133d861d35f14`;
+            const urlGenres = `https://api.themoviedb.org/3/${this.kind}/${this.film.id}?api_key=f2191c31fa927ebbbfd133d861d35f14`;
 
-            axios.get(urlType)
+            axios.get(urlGenres)
                 .then((response) => {
-                    let i = 0;
-                    while (response.data.genres && (response.data.genres.length - 1 >= i) && i <= 2) {
-                        this.type.push(response.data.genres[i].name);
-                        i++;
-                    }
-                    if (this.type.length === 0) {
-                        this.type = ["non trovato generi"];
+                    if (response.data.genres && response.data.genres.length > 0) {
+                        let i = 0;
+                        while ((response.data.genres.length - 1 >= i) && i <= 2) {
+                            this.genres.push(response.data.genres[i].name);
+                            i++;
+                        }
+                    } else {
+                        this.genres = ["Informazioni non disponibili"];
                     }
                 })
                 .catch((error) => {
-                    this.type = ["non trovato generi"];
+                    this.genres = ["Informazioni non disponibili"];
                     console.error(error);
                 });
         }
-    
     },
 
-},
-mounted() {
-
-    this.getActorsApi();
-
-}
-
+    },
+    mounted() {
+        this.getInfoApi();
+    }
 }
 </script>
 
@@ -97,9 +94,9 @@ mounted() {
                 <h6>{{ originalTitle }}</h6>
                 <div class="overview">
                     <p>{{ overview }}</p>
-                    <div class="p-1" v-if="(this.type.length>0)">
+                    <div class="p-1" v-if="(this.genres.length>0)">
                         <div>Genere:</div>
-			            <div class="" v-for="(genre,i) in this.type" :key="i">{{ genre }}</div>
+			            <div class="" v-for="(genre,i) in this.genres" :key="i">{{ genre }}</div>
 			
 		            </div>
 		            <div class="p-1" v-if="(this.actors.length>0)">

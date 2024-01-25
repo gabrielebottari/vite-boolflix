@@ -7,7 +7,7 @@ export default {
   data(){
     
         return {
-            store,  
+            store,
         }
 
     },
@@ -17,7 +17,19 @@ export default {
     },
     props: {
     movie: Object,
+    selectedMovieGenre: {
+      type: [String, Number], // Accetta stringhe e numeri
+      default: null,
+    },
+    selectedTvGenre: {
+      type: [String, Number], // Accetta stringhe e numeri
+      default: null,
+    },
+    genre:Object,
   },
+  methods: {
+
+  }
 }
 </script>
 
@@ -31,12 +43,13 @@ export default {
         </div>
 
         <div v-else class="text-white container">
+
            <p v-if="!store.loading && store.moviesArray.length === 0 && store.seriesArray.length === 0" class="fs-1 text-center">Nessun risultato trovato!</p>
 
             <!-- Se ci sono film, mostra la sezione "Film trovati" -->
             <div v-if="store.moviesArray.length > 0" class="row">
                 <p class="ps-3 fs-3">Film trovati:</p>
-                <div v-for="movie in store.moviesArray" :key="movie.id" class="col-lg-3 col-md-4 col-sm-6 p-3 bg-dark text-white">
+                <div v-for="movie in store.moviesArray" :key="movie.id" v-if="selectedMovieGenre === null || movie.genre_ids.includes(selectedMovieGenre)" class="col-lg-3 col-md-4 col-sm-6 p-3 bg-dark text-white">
                     <Card
                         :poster="movie.poster_path"
                         :title="movie.title"
@@ -44,7 +57,7 @@ export default {
                         :language="movie.original_language"
                         :overview="movie.overview"
                         :film="movie"
-                        :typeApi="'movie'"
+                        :kind="'movie'"
                         :averageScore="Math.round(movie.vote_average / 2)"
                     />
                 </div>
@@ -53,7 +66,7 @@ export default {
             <!-- Se ci sono serie TV, mostra la sezione "Serie trovate" -->
             <div v-if="store.seriesArray.length > 0" class="row">
                 <p class="ps-3 fs-3">Serie trovate:</p>
-                <div v-for="serie in store.seriesArray" :key="serie.id" class="col-lg-3 col-md-4 col-sm-6 p-3 bg-dark text-white">
+                <div v-for="serie in store.seriesArray" :key="serie.id" v-if="selectedTvGenre === null || serie.genre_ids.includes(selectedTvGenre)" class="col-lg-3 col-md-4 col-sm-6 p-3 bg-dark text-white">
                     <Card
                         :poster="serie.poster_path"
                         :title="serie.name"
@@ -61,7 +74,7 @@ export default {
                         :language="serie.original_language"
                         :overview="serie.overview"
                         :film="serie"
-                        :typeApi="'tv'"
+                        :kind="'tv'"
                         :averageScore="Math.round(serie.vote_average / 2)"
                     />
                 </div>
