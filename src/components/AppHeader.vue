@@ -21,7 +21,7 @@ export default {
             <div class="row">
 
                 <div class="col-3">
-                    <img src="../../public/Logonetflix.png" alt="logo">
+                    <img src="../../public/BoolflixLogo.png" alt="logo">
                 </div>
 
                 <div class="col-9 d-flex align-items-center">
