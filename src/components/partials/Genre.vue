@@ -14,10 +14,10 @@ export default{
 	},
     methods: {
 
-    toggleGenre() {
-        this.isActive = !this.isActive;
-        this.$emit('genreSelected', this.genre.id, this.isActive);
-    },
+        toggleGenre() {
+            this.isActive = !this.isActive;
+            this.$emit('genreSelected', this.genre.id, this.isActive);
+        },
 
     },
 }
@@ -25,16 +25,17 @@ export default{
 </script>
 
 <template>
-<button  @click="toggleGenre"
-    :class="{ active: isActive }">
-	{{ genre.name }}
-</button>
+    <button  @click="toggleGenre"
+        :class="{ active: isActive }">
+        {{ genre.name }}
+    </button>
 </template>
 
 <style lang ="scss" scoped>
 .active{
-    -webkit-box-shadow: #FFF 0 -1px 4px, #ff0 0 -2px 10px, #ff8000 0 -10px 20px, red 0 -18px 40px, 0px 50px 50px -30px rgba(0,0,0,0.14); 
-    box-shadow: #FFF 0 -1px 4px, #ff0 0 -2px 10px, #ff8000 0 -10px 20px, red 0 -18px 40px, 0px 50px 50px -30px rgba(0,0,0,0.14);
+    -webkit-box-shadow: 0px 0px 5px 5px rgba(229,9,19,0.7);
+    -moz-box-shadow: 0px 0px 5px 5px rgba(229,9,19,0.7);
+    box-shadow: 0px 0px 5px 5px rgba(229,9,19,0.7);
 }
 
 </style>

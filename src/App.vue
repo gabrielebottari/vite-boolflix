@@ -3,7 +3,6 @@ import AppHeader from './components/AppHeader.vue';
 import AppMain from './components/AppMain.vue';
 import {store} from './data/store';
 import axios from 'axios'
-//import AppFooter from './components/AppFooter.vue';
 
 export default {
   components: {
@@ -21,8 +20,6 @@ export default {
   methods: {
     getApi() {
     const trimmedSearchInput = (store.searchInput || "").trim();
-
-    // Imposta lo stato di loading su true
     store.loading = true;
 
     try {
@@ -36,32 +33,30 @@ export default {
                 .then((result) => {
                     store.moviesArray = result.data.results;
                     console.log("movies", store.moviesArray);
-                    this.hasPerformedSearch = true; // Imposta a true dopo la ricerca
+                    this.hasPerformedSearch = true;
+                    console.log("Caricati film:", store.moviesArray);
+                    this.filterContentByGenre();
                 })
                 .catch((error) => {
                     console.error("Errore nella chiamata API:", error);
                 })
                 .finally(() => {
-                    // Imposta lo stato di loading su false alla fine
                     store.loading = false;
                 });
         } else {
             console.log(
                 "La stringa di ricerca è vuota dopo il trim, evito la chiamata API."
             );
-            // Imposta lo stato di loading su false
             store.loading = false;
         }
     } catch (error) {
         console.error("Errore durante l'esecuzione di getApi:", error);
-        // Gestisci l'errore in modo appropriato
     }
 },
 
     getApiTV() {
     const trimmedSearchInput = (store.searchInput || "").trim();
 
-    // Imposta lo stato di loading su true
     store.loading = true;
 
     if (trimmedSearchInput !== "") {
@@ -74,23 +69,35 @@ export default {
         .then((result) => {
             store.seriesArray = result.data.results;
             console.log("series", store.seriesArray);
-            this.hasPerformedSearch = true; // Imposta a true dopo la ricerca
+            this.hasPerformedSearch = true; 
+            this.filterContentByGenre();
         })
         .catch((error) => {
             console.error("Errore nella chiamata API:", error);
         })
         .finally(() => {
-            // Imposta lo stato di loading su false alla fine
             store.loading = false;
         });
     } else {
         console.log(
-        "La stringa di ricerca è vuota dopo il trim, evito la chiamata API."
         );
-        // Imposta lo stato di loading su false
         store.loading = false;
     }
     },
+
+    filterContentByGenre() {
+    if (this.store.activeGenre) {
+      this.store.filteredMovies = this.store.moviesArray.filter(movie =>
+        movie.genre_ids.includes(this.store.activeGenre)
+      );
+      this.store.filteredSeries = this.store.seriesArray.filter(serie =>
+        serie.genre_ids.includes(this.store.activeGenre)
+      );
+    } else {
+      this.store.filteredMovies = this.store.moviesArray;
+      this.store.filteredSeries = this.store.seriesArray;
+    }
+  },
 
     getApiLoad() {
     store.loading = true;
@@ -101,10 +108,10 @@ export default {
         store.moviesArray = result.data.results;
         console.log("series", store.loadArray);
         console.log("movies", store.moviesArray);
-        this.hasPerformedSearch = true; // Imposta a true dopo la ricerca
+        this.hasPerformedSearch = true;
+        this.filterContentByGenre();
       })
       .finally(() => {
-        // Imposta lo stato di loading su false alla fine
         store.loading = false;
       });
     },
@@ -116,10 +123,16 @@ export default {
 
   },
 mounted() {
-    // Stampa i dati del cast nella console per ispezionarli
     console.log("Dati del cast:", this.cast);
   },
-    
+  computed: {
+    displayedMovies() {
+      return this.store.activeGenre ? this.store.filteredMovies : this.store.moviesArray;
+    },
+    displayedSeries() {
+      return this.store.activeGenre ? this.store.filteredSeries : this.store.seriesArray;
+    },
+}  
 }
 </script>
 
@@ -127,12 +140,11 @@ mounted() {
 
     <div class="bg-dark container-fluid p-2">
 
-        <AppHeader @searchMovies="getApi" @searchSeries="getApiTV"/>
+      <AppHeader @searchMovies="getApi" @searchSeries="getApiTV"/>
 
-        <AppMain class="bg-dark px-5 py-1"/>
+      <AppMain class="bg-dark px-5 py-1"/>
 
     </div>
-
 
 </template>
 

@@ -25,22 +25,19 @@ export default {
                 </div>
 
                 <div class="col-9 d-flex align-items-center">
-
                     
                     <div class="input-group">
 
-                        <input v-model="store.searchInput" @keyup.enter="$emit('searchMovies'), $emit('searchSeries')" type="text" class="form-control" placeholder="Search" aria-label="Search"/>
+                        <input v-model="store.searchInput" @keyup.enter="$emit('searchMovies'), $emit('searchSeries')" type="text" class="form-control" placeholder="Search" aria-label="Search" />
 
-                        <button @click="$emit('searchMovies'), $emit('searchSeries')" class="btn btn-danger rounded-0" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                        <button @click="$emit('searchMovies'), $emit('searchSeries')" class="btn btn-danger" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
 
                     </div>
 
                 </div>
 
-
             </div>
-
-            
+           
         </div>
     </header>
 </template>

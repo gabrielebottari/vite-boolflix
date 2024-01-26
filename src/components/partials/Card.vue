@@ -16,8 +16,7 @@ export default {
         activeGenre: String,
         isActive: Boolean,
         checkActiveGenre: Function,
-        activeGenre: Number,
-        
+        activeGenre: Number,   
     },
 
     data() {
@@ -30,12 +29,9 @@ export default {
     },
     methods: {
         isActiveGenre() {
-        // Se non è stato selezionato alcun genere, considera tutte le card non attive
         if (!this.store.activeGenre) return false;
-
-        // Se un genere è stato selezionato, verifica se la card corrisponde al genere attivo
         return this.film.genre_ids.includes(this.store.activeGenre);
-    },
+        },
 
             getInfoApi() {
         if (!this.film || !this.film.id) {
@@ -80,7 +76,7 @@ export default {
                 .catch((error) => {
                     this.genres = ["Informazioni non disponibili"];
                     console.error(error);
-                });
+            });
         }
     },
 
@@ -88,7 +84,6 @@ export default {
     mounted() {
         this.getInfoApi();
 
-        // Aggiungi il console log qui per verificare se la carta è attiva
         console.log("Card attiva:", this.isActive);
         console.log("Generi della card:", this.film.genre_ids);
         console.log("Genere attivo:", this.store.activeGenre);
@@ -144,7 +139,6 @@ export default {
 
     </div>
 
-
 </template>
 
 <style lang="scss" scoped>
@@ -152,12 +146,7 @@ export default {
 .movie-card {
   position: relative;
   height: 420px;
-    &.active {
-        -webkit-box-shadow: #FFF 0 -1px 4px, #ff0 0 -2px 10px, #ff8000 0 -10px 20px, red 0 -18px 40px, 0px 50px 50px -30px rgba(0,0,0,0.14); 
-        box-shadow: #FFF 0 -1px 4px, #ff0 0 -2px 10px, #ff8000 0 -10px 20px, red 0 -18px 40px, 0px 50px 50px -30px rgba(0,0,0,0.14);
-    }
 
-  
   .card-img {
     position: absolute;
     top: 0;
@@ -172,8 +161,7 @@ export default {
             height: 100%;   
             margin: 0;      
         }
-
-  }
+    }
 
   .card-info {
     position: absolute;
@@ -184,13 +172,10 @@ export default {
     transform: rotateY(-180deg);
     transition: transform 0.5s;
     background-color: black;
-        .active{
-		background-color:orange;
-	    }
 
     .card-title{
         .overview{
-            height: 235px;
+            height: 230px;
             overflow-y: auto;
             padding: 5px;
 
@@ -208,7 +193,7 @@ export default {
     .card-end{
 
         position: absolute;
-        bottom: 10px;
+        bottom: 15px;
         .card-lang{
             img{
                 width: 30px;
